@@ -5,8 +5,13 @@ import math
 import torch
 
 from torch import nn
-from torch_householder import torch_householder_orgqr
 
+# from torch_householder import torch_householder_orgqr
+
+def torch_householder_orgqr(A, tau=None, eps=1e-12): 
+    if tau is None: 
+        tau = 2 / ( torch.linalg.norm(A, dim=-1) ** 2).clamp(min=eps) 
+    return torch.linalg.householder_product(A, tau) 
 
 class Orthogonal(nn.Module):
     """Based on https://pytorch.org/docs/stable/_modules/torch/nn/utils/parametrizations.html#orthogonal"""
